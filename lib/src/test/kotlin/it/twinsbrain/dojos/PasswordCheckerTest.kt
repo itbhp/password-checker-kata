@@ -2,6 +2,7 @@ package it.twinsbrain.dojos
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class PasswordCheckerTest {
@@ -15,7 +16,7 @@ internal class PasswordCheckerTest {
         assertTrue(underTest.verify("123456789"), failMessage)
     }
 
-    @Test
+    @Disabled
     fun `it should contain just letters and digits`() {
         val failMessage = "password should have be alphanumeric"
         assertFalse(underTest.verify(",!()>?/"), failMessage)
