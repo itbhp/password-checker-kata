@@ -17,9 +17,17 @@ internal class PasswordCheckerTest {
   }
 
   @Test
-  fun `it should contain just letters and digits`() {
+  fun `it should contain letters and digits`() {
     val underTest = PasswordChecker(AlphaNumericConstraint)
-    val failMessage = "password should have be alphanumeric"
+    val failMessage = "password should be alphanumeric"
     assertFalse(underTest.verify(",!()>?/"), failMessage)
+    assertTrue(underTest.verify("123abcdef"), failMessage)
+  }
+
+  @Test
+  fun `it should contain at least one special char`() {
+    val underTest = PasswordChecker(SpecialCharsConstraint)
+    val failMessage = "password should be alphanumeric"
+    assertTrue(underTest.verify(",!()>?/"), failMessage)
   }
 }

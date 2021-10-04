@@ -19,8 +19,15 @@ object LengthConstraint : Constraint {
 }
 
 object AlphaNumericConstraint : Constraint {
-  override fun apply(password: String): Boolean = password.isAlphaNumeric()
+  override fun apply(password: String): Boolean = password.containsAlphaNumeric()
 
-  private fun String.isAlphaNumeric(): Boolean = this.filter { it in 'A'..'Z' || it in 'a'..'z' || it in '0'..'9' }
-      .length == this.length
+  private fun String.containsAlphaNumeric(): Boolean =
+    this.any { it in 'A'..'Z' || it in 'a'..'z' || it in '0'..'9' }
+}
+
+object SpecialCharsConstraint : Constraint {
+  override fun apply(password: String): Boolean = password.containsSpecialChars()
+
+  private fun String.containsSpecialChars(): Boolean =
+    this.any { it in "±§!@#$%^&*()_+{}[]:;\"',<.>?/|`~\\" }
 }
