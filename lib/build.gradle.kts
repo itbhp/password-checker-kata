@@ -23,3 +23,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.21.0")
     testImplementation("org.mockito:mockito-junit-jupiter:3.12.4")
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
