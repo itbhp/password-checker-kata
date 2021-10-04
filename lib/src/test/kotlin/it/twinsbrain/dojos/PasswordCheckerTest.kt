@@ -9,7 +9,7 @@ internal class PasswordCheckerTest {
 
   @Test
   fun `it should have at least seven chars`() {
-    val underTest = PasswordChecker(LengthConstraint)
+    val underTest = PasswordChecker(LengthConstraint(7))
     val failMessage = "password should have minimum 7 chars"
     assertFalse(underTest.verify("123"), failMessage)
     assertTrue(underTest.verify("1234567"), failMessage)
@@ -22,6 +22,8 @@ internal class PasswordCheckerTest {
     val failMessage = "password should be alphanumeric"
     assertFalse(underTest.verify(",!()>?/"), failMessage)
     assertTrue(underTest.verify("123abcdef"), failMessage)
+    assertTrue(underTest.verify("123"), failMessage)
+    assertTrue(underTest.verify("abcdef"), failMessage)
   }
 
   @Test
@@ -34,7 +36,7 @@ internal class PasswordCheckerTest {
   @Test
   internal fun `acceptance test`() {
     val underTest = PasswordChecker(
-      ComposedConstraint(SpecialCharsConstraint, LengthConstraint, AlphaNumericConstraint)
+      ComposedConstraint(SpecialCharsConstraint, LengthConstraint(7), AlphaNumericConstraint)
     )
     assertTrue(underTest.verify("asd1231,!()>?/323"), "minimum 7 chars, alphanumeric with at least one special char")
   }

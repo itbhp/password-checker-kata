@@ -14,8 +14,8 @@ class ComposedConstraint(private vararg val constraint: Constraint) : Constraint
   override fun apply(password: String): Boolean = constraint.all { it.apply(password) }
 }
 
-object LengthConstraint : Constraint {
-  override fun apply(password: String): Boolean = password.length >= 7
+data class LengthConstraint(val length: Int) : Constraint {
+  override fun apply(password: String): Boolean = password.length >= length
 }
 
 object AlphaNumericConstraint : Constraint {
