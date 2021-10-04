@@ -30,4 +30,12 @@ internal class PasswordCheckerTest {
     val failMessage = "password should be alphanumeric"
     assertTrue(underTest.verify(",!()>?/"), failMessage)
   }
+
+  @Test
+  internal fun `acceptance test`() {
+    val underTest = PasswordChecker(
+      ComposedConstraint(SpecialCharsConstraint, LengthConstraint, AlphaNumericConstraint)
+    )
+    assertTrue(underTest.verify("asd1231,!()>?/323"), "minimum 7 chars, alphanumeric with at least one special char")
+  }
 }
