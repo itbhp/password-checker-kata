@@ -2,6 +2,6 @@ package it.twinsbrain.dojos
 
 class PasswordChecker {
   fun verify(password: String): Boolean {
-    return false
+    return password.length >=7
   }
 }
