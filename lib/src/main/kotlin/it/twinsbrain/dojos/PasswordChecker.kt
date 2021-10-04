@@ -2,6 +2,6 @@ package it.twinsbrain.dojos
 
 class PasswordChecker {
   fun verify(password: String): Boolean {
-    return true
+    return false
   }
 }
