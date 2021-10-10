@@ -27,35 +27,34 @@ object NoAlphanumericCharFound : ValidationError()
 object NoSpecialCharFound : ValidationError()
 
 data class LengthValidator(val length: Int) : Rule {
-  override fun check(password: String): ValidatedNel<ValidationError, Password> =
-    if (password.length >= length) {
-      Validated.validNel(password)
-    } else {
-      Validated.invalidNel(TooFewChars)
-    }
+  private val rule = BooleanRule({ it.length >= length }, TooFewChars)
+  override fun check(password: String): ValidatedNel<ValidationError, Password> = rule.check(password)
 }
 
 object AlphaNumericValidator : Rule {
+  private val rule = BooleanRule({ it.containsAlphaNumeric() }, NoAlphanumericCharFound)
+
   private fun String.containsAlphaNumeric(): Boolean =
     this.any { it in 'A'..'Z' || it in 'a'..'z' || it in '0'..'9' }
 
-  override fun check(password: String): ValidatedNel<ValidationError, Password> =
-    if (password.containsAlphaNumeric()) {
-      Validated.validNel(password)
-    } else {
-      Validated.invalidNel(NoAlphanumericCharFound)
-    }
+  override fun check(password: String): ValidatedNel<ValidationError, Password> = rule.check(password)
 }
 
 object SpecialCharsValidator : Rule {
+  private val rule = BooleanRule({ it.containsSpecialChars() }, NoSpecialCharFound)
 
   private fun String.containsSpecialChars(): Boolean =
     this.any { it in "±§!@#$%^&*()_+{}[]:;\"',<.>?/|`~\\" }
 
-  override fun check(password: String): ValidatedNel<ValidationError, Password> =
-    if (password.containsSpecialChars()) {
-      Validated.validNel(password)
+  override fun check(password: String): ValidatedNel<ValidationError, Password> = rule.check(password)
+}
+
+data class BooleanRule(val isValid: Predicate<String>, val error: ValidationError) : Rule {
+  override fun check(password: String): ValidatedNel<ValidationError, Password> {
+    return if (isValid(password)) {
+      password.valid()
     } else {
-      Validated.invalidNel(NoSpecialCharFound)
+      Validated.invalidNel(error)
     }
+  }
 }
