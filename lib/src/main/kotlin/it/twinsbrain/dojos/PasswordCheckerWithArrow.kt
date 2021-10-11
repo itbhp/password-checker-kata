@@ -12,7 +12,9 @@ class PasswordValidator(private val validations: List<Rule>) {
     validations
       .map { it.check(this) }
       .sequenceValidated(Semigroup.nonEmptyList())
-      .map { it.first() }
+      .map { takeFirstValid(it) }
+
+  private fun takeFirstValid(it: List<Password>) = it.first()
 }
 
 typealias Password = String
