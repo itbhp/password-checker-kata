@@ -8,11 +8,13 @@ class PasswordValidator(private val validations: List<Rule>) {
 
   private fun String.checkAll(
     validations: List<Rule>
-  ): ValidatedNel<ValidationError, Password> =
-    validations
+  ): ValidatedNel<ValidationError, Password> {
+    val results: List<Validated<NonEmptyList<ValidationError>, Password /* = kotlin.String */>> = validations
       .map { it.check(this) }
+    val sequenceValidated: Validated<NonEmptyList<ValidationError>, List<Password /* = kotlin.String */>> = results
       .sequenceValidated(Semigroup.nonEmptyList())
-      .map { takeFirstValid(it) }
+    return sequenceValidated.map { takeFirstValid(it) }
+  }
 
   private fun takeFirstValid(it: List<Password>) = it.first()
 }
